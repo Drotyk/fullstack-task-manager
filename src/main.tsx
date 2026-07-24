@@ -1,10 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.js'
-import { Container } from './Core/Container.js'
-import { HttpTaskRepository } from './Infra/HttpTaskRepository.js'
-import { TaskService } from './App/TaskService.js'
-import { TaskServiceProvider } from './App/TaskContext.js'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.js';
+import { Container } from './Core/Container.js';
+import { HttpTaskRepository } from './Infra/HttpTaskRepository.js';
+import { TaskService } from './App/TaskService.js';
+import { TaskServiceProvider } from './App/TaskContext.js';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/tasks';
 
@@ -22,5 +22,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <TaskServiceProvider service={taskService}>
       <App />
     </TaskServiceProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

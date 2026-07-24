@@ -12,6 +12,9 @@ const app = express();
 const port = process.env.PORT || 3001;
 const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/taskdb';
 
+const getErrorMessage = (err: unknown): string =>
+  err instanceof Error ? err.message : String(err);
+
 // DI Setup
 const container = new Container();
 const repo = new PostgresTaskRepository(dbUrl);
@@ -23,50 +26,50 @@ app.use(cors());
 app.use(express.json());
 
 // API Routes
-app.get('/api/tasks', async (req, res) => {
-    try {
-        const service = container.get<TaskService>('TaskService');
-        const tasks = await service.all();
-        res.json(tasks);
-    } catch (err: any) {
-        res.status(500).json({ error: err.message });
-    }
+app.get('/api/tasks', async (_req, res) => {
+  try {
+    const service = container.get<TaskService>('TaskService');
+    const tasks = await service.all();
+    res.json(tasks);
+  } catch (err: unknown) {
+    res.status(500).json({ error: getErrorMessage(err) });
+  }
 });
 
 app.post('/api/tasks', async (req, res) => {
-    try {
-        const { title, description, priority, dueDate } = req.body;
-        const service = container.get<TaskService>('TaskService');
-        const id = await service.create(title, description, priority, dueDate);
-        res.status(201).json({ id });
-    } catch (err: any) {
-        res.status(400).json({ error: err.message });
-    }
+  try {
+    const { title, description, priority, dueDate } = req.body;
+    const service = container.get<TaskService>('TaskService');
+    const id = await service.create(title, description, priority, dueDate);
+    res.status(201).json({ id });
+  } catch (err: unknown) {
+    res.status(400).json({ error: getErrorMessage(err) });
+  }
 });
 
 app.patch('/api/tasks/:id/status', async (req, res) => {
-    try {
-        const { status } = req.body;
-        const id = parseInt(req.params.id);
-        const service = container.get<TaskService>('TaskService');
-        await service.changeStatus(id, taskStatusFromString(status));
-        res.sendStatus(204);
-    } catch (err: any) {
-        res.status(400).json({ error: err.message });
-    }
+  try {
+    const { status } = req.body;
+    const id = parseInt(req.params.id);
+    const service = container.get<TaskService>('TaskService');
+    await service.changeStatus(id, taskStatusFromString(status));
+    res.sendStatus(204);
+  } catch (err: unknown) {
+    res.status(400).json({ error: getErrorMessage(err) });
+  }
 });
 
 app.delete('/api/tasks/:id', async (req, res) => {
-    try {
-        const id = parseInt(req.params.id);
-        const service = container.get<TaskService>('TaskService');
-        await service.remove(id);
-        res.sendStatus(204);
-    } catch (err: any) {
-        res.status(400).json({ error: err.message });
-    }
+  try {
+    const id = parseInt(req.params.id);
+    const service = container.get<TaskService>('TaskService');
+    await service.remove(id);
+    res.sendStatus(204);
+  } catch (err: unknown) {
+    res.status(400).json({ error: getErrorMessage(err) });
+  }
 });
 
 app.listen(port, () => {
-    console.log(`Backend API running at http://localhost:${port}`);
+  console.log(`Backend API running at http://localhost:${port}`);
 });

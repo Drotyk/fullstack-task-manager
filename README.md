@@ -1,46 +1,50 @@
-#  Task Manager Fullstack
+# 📝 Task Manager Fullstack
 
-![HTML5](https://img.shields.io/badge/HTML5-static-orange)
-![CSS3](https://img.shields.io/badge/CSS3-styling-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
-![Makefile](https://img.shields.io/badge/Makefile-automation-brightgreen?logo=gnu&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-Unit_Tests-yellow?logo=vitest)
+![ESLint](https://img.shields.io/badge/ESLint-Linter-4B32C3?logo=eslint)
+![Prettier](https://img.shields.io/badge/Prettier-Formatter-F7B93E?logo=prettier)
+![CI Pipeline](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions)
 
 Сучасний веб-додаток для керування завданнями, побудований з акцентом на **Clean Architecture** та принципи **SOLID**. Проект демонструє ефективне поєднання React на фронтенді та Node.js з PostgreSQL на бекенді.
 
 ---
 
-##  Особливості
+## ✨ Особливості
 
 - **Повний CRUD**: Створення, перегляд, оновлення статусу та видалення завдань.
 - **Чиста Архітектура**: Чіткий поділ на шари (Domain, Application, Infrastructure, Ports).
 - **Dependency Injection**: Власний контейнер для керування залежностями.
 - **Type Safety**: Повна підтримка TypeScript на обох кінцях стеку.
-- **Modern UI**: Мінімалістичний та адаптивний інтерфейс на Vanilla CSS.
+- **Юніт-тестування**: Тестування бізнес-логіки та доменних правил за допомогою Vitest.
+- **Якість коду & CI**: Автоматичний лінтинг (ESLint), форматування (Prettier) та перевірка збірки у GitHub Actions.
 
-##  Технологічний стек
+## 🛠 Технологічний стек
 
 | Складник | Технології |
 | :--- | :--- |
-| **Frontend** | React 18, Vite, TypeScript |
+| **Frontend** | React 18, Vite, TypeScript, Vanilla CSS |
 | **Backend** | Node.js, Express, ts-node |
 | **Database** | PostgreSQL, `pg` (node-postgres) |
-| **Architectural Patterns** | Repository Pattern, Dependency Injection, Domain Driven Design (elements) |
+| **Testing** | Vitest |
+| **Code Quality & CI** | ESLint, Prettier, GitHub Actions |
+| **Architectural Patterns** | Repository Pattern, Dependency Injection, DDD (elements) |
 
 ---
 
-##  Архітектура проекту
+## 🏗 Архітектура проекту
 
 Проект організований за принципами шаруватої архітектури:
 
 - `src/Domain`: Ядро системи — сутності (`Task`) та бізнес-правила. Не залежить від фреймворків.
 - `src/Ports`: Інтерфейси для зовнішніх систем (наприклад, `ITaskRepository`).
-- `src/App`: Прикладний шар (Service) — оркестрація бізнес-логіки.
-- `src/Infra`: Реалізація портів (робота з БД, LocalStorage тощо).
+- `src/App`: Прикладний шар (`TaskService`, `TaskContext`) — оркестрація бізнес-логіки.
+- `src/Infra`: Реалізація портів (`PostgresTaskRepository`, `HttpTaskRepository`, `LocalStorageTaskRepository`).
 - `src/Core`: Допоміжні інструменти, як-от DI-контейнер.
 
 ---
 
-##  Швидкий старт
+## 🚀 Швидкий старт
 
 ### 1. Попередні вимоги
 - Встановлений **Node.js** (v18+)
@@ -80,7 +84,27 @@ npm run dev:frontend
 
 Додаток буде доступний за адресою: [http://localhost:5173](http://localhost:5173)
 
-### 6. Збірка та Production запуск
+---
+
+## 🧪 Тестування, Лінтинг та Форматування
+
+- **Запуск юніт-тестів (Vitest):**
+  ```bash
+  npm run test
+  ```
+- **Запуск лінтера (ESLint):**
+  ```bash
+  npm run lint
+  ```
+- **Форматування коду (Prettier):**
+  ```bash
+  npm run format
+  ```
+
+---
+
+## 📦 Збірка та Production запуск
+
 Збірка фронтенду (Vite) та бекенду (`tsconfig.server.json` -> `dist/server.js`):
 ```bash
 npm run build
@@ -90,28 +114,25 @@ npm run build
 npm start
 ```
 
-##  Структура папок
+---
+
+## 📂 Структура папок
 
 ```text
+├── .github/workflows/ # GitHub Actions CI configuration
 ├── src/
-│   ├── App/          # Application Layer (Services)
+│   ├── App/          # Application Layer (TaskService, TaskContext)
 │   ├── Core/         # Framework-agnostic core tools (DI Container)
 │   ├── Domain/       # Business Logic & Entities
-│   ├── Infra/        # Data Access & Implementation
+│   ├── Infra/        # Data Access (Postgres, Http, LocalStorage)
 │   ├── Ports/        # Interfaces (Abstractions)
 │   ├── App.tsx       # UI Components
 │   ├── server.ts     # Express Server entry point
 │   └── main.tsx      # React entry point
+├── tests/            # Vitest Unit Tests
 ├── public/           # Static assets
 └── views/            # HTML templates
 ```
 
-##  Розгортання (Deployment)
-
-Цей проект використовує повноцінний бекенд та базу даних. Для деплою рекомендується:
-- **Frontend**: Vercel, Netlify або Cloudflare Pages.
-- **Backend**: Render, Railway або Fly.io.
-- **Database**: Managed PostgreSQL на Railway або Supabase.
-
 ---
- *Цей проект створений для демонстрації навичок архітектурного проектування та розробки fullstack додатків.*
+⭐ *Цей проект створений для демонстрації навичок архітектурного проектування та розробки fullstack додатків.*
