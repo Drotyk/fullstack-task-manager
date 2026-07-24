@@ -1,10 +1,15 @@
-# 📝 Task Manager Fullstack
+#  Task Manager Fullstack
+
+![HTML5](https://img.shields.io/badge/HTML5-static-orange)
+![CSS3](https://img.shields.io/badge/CSS3-styling-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+![Makefile](https://img.shields.io/badge/Makefile-automation-brightgreen?logo=gnu&logoColor=white)
 
 Сучасний веб-додаток для керування завданнями, побудований з акцентом на **Clean Architecture** та принципи **SOLID**. Проект демонструє ефективне поєднання React на фронтенді та Node.js з PostgreSQL на бекенді.
 
 ---
 
-## ✨ Особливості
+##  Особливості
 
 - **Повний CRUD**: Створення, перегляд, оновлення статусу та видалення завдань.
 - **Чиста Архітектура**: Чіткий поділ на шари (Domain, Application, Infrastructure, Ports).
@@ -12,7 +17,7 @@
 - **Type Safety**: Повна підтримка TypeScript на обох кінцях стеку.
 - **Modern UI**: Мінімалістичний та адаптивний інтерфейс на Vanilla CSS.
 
-## 🛠 Технологічний стек
+##  Технологічний стек
 
 | Складник | Технології |
 | :--- | :--- |
@@ -23,7 +28,7 @@
 
 ---
 
-## 🏗 Архітектура проекту
+##  Архітектура проекту
 
 Проект організований за принципами шаруватої архітектури:
 
@@ -35,7 +40,7 @@
 
 ---
 
-## 🚀 Швидкий старт
+##  Швидкий старт
 
 ### 1. Попередні вимоги
 - Встановлений **Node.js** (v18+)
@@ -85,7 +90,7 @@ npm run build
 npm start
 ```
 
-## 📂 Структура папок
+##  Структура папок
 
 ```text
 ├── src/
@@ -101,7 +106,7 @@ npm start
 └── views/            # HTML templates
 ```
 
-## ⚠️ Розгортання (Deployment)
+##  Розгортання (Deployment)
 
 Цей проект використовує повноцінний бекенд та базу даних. Для деплою рекомендується:
 - **Frontend**: Vercel, Netlify або Cloudflare Pages.
@@ -109,4 +114,4 @@ npm start
 - **Database**: Managed PostgreSQL на Railway або Supabase.
 
 ---
-⭐ *Цей проект створений для демонстрації навичок архітектурного проектування та розробки fullstack додатків.*
+ *Цей проект створений для демонстрації навичок архітектурного проектування та розробки fullstack додатків.*
