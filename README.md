@@ -1,66 +1,110 @@
-# 📝 Task Manager Fullstack
+# Task Manager Fullstack
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React_18-20232A?style=flat&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-Unit_Tests-yellow?logo=vitest)
 ![ESLint](https://img.shields.io/badge/ESLint-Linter-4B32C3?logo=eslint)
 ![Prettier](https://img.shields.io/badge/Prettier-Formatter-F7B93E?logo=prettier)
 ![CI Pipeline](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions)
 
-Сучасний веб-додаток для керування завданнями, побудований з акцентом на **Clean Architecture** та принципи **SOLID**. Проект демонструє ефективне поєднання React на фронтенді та Node.js з PostgreSQL на бекенді.
+Сучасний Fullstack веб-додаток для керування завданнями, розроблений із суворим дотриманням принципів **Clean Architecture** (Ports & Adapters) та **SOLID**. 
+
+Проєкт демонструє побудову розширюваної системи з підтримкою різних джерел даних (PostgreSQL, LocalStorage, HTTP REST API), власного DI-контейнера, повного покриття юніт-тестами та автоматизованого CI/CD пайплайну.
 
 ---
 
-## ✨ Особливості
+## Ключові особливості
 
-- **Повний CRUD**: Створення, перегляд, оновлення статусу та видалення завдань.
-- **Чиста Архітектура**: Чіткий поділ на шари (Domain, Application, Infrastructure, Ports).
-- **Dependency Injection**: Власний контейнер для керування залежностями.
-- **Type Safety**: Повна підтримка TypeScript на обох кінцях стеку.
-- **Юніт-тестування**: Тестування бізнес-логіки та доменних правил за допомогою Vitest.
-- **Якість коду & CI**: Автоматичний лінтинг (ESLint), форматування (Prettier) та перевірка збірки у GitHub Actions.
+- **Повний CRUD-функціонал**: Створення, перегляд, зміна статусу (`TODO`, `DOING`, `DONE`) та видалення завдань.
+- **Clean / Hexagonal Architecture**: Повний поділ на шари (Domain, Ports, Application, Infrastructure, UI).
+- **Dependency Injection (DI)**: Власний легкий DI-контейнер (`Container.ts`) для керування залежностями на бекенді та фронтенді.
+- **Взаємозамінність репозиторіїв**: Можливість гарячої заміни джерела даних (`PostgresTaskRepository`, `HttpTaskRepository`, `LocalStorageTaskRepository`) без зміни бізнес-логіки.
+- **Full Type Safety**: 100% покриття TypeScript на всіх рівнях системи без використання `any`.
+- **Автоматичне тестування та CI**: Юніт-тестування за допомогою **Vitest**, суворий лінтинг (**ESLint**), форматування (**Prettier**) та автоматична перевірка у **GitHub Actions**.
 
-## 🛠 Технологічний стек
+---
 
-| Складник | Технології |
+## Технологічний стек
+
+| Шар / Компонент | Технології та інструменти |
 | :--- | :--- |
-| **Frontend** | React 18, Vite, TypeScript, Vanilla CSS |
-| **Backend** | Node.js, Express, ts-node |
-| **Database** | PostgreSQL, `pg` (node-postgres) |
-| **Testing** | Vitest |
-| **Code Quality & CI** | ESLint, Prettier, GitHub Actions |
-| **Architectural Patterns** | Repository Pattern, Dependency Injection, DDD (elements) |
+| **Frontend** | React 18, Vite, TypeScript, Vanilla CSS, React Context |
+| **Backend** | Node.js (ESM), Express, `pg` (node-postgres), dotenv, cors |
+| **Database** | PostgreSQL |
+| **Тестування** | Vitest |
+| **Лінтер / Форматер** | ESLint v10 (Flat Config), Prettier |
+| **CI / CD** | GitHub Actions Workflow (`ci.yml`) |
+| **Архітектура** | Clean Architecture, Ports & Adapters, SOLID, Repository Pattern, DI |
 
 ---
 
-## 🏗 Архітектура проекту
+## Архітектура та принципи SOLID
 
-Проект організований за принципами шаруватої архітектури:
+### Схема взаємодії шарів (Ports & Adapters)
 
-- `src/Domain`: Ядро системи — сутності (`Task`) та бізнес-правила. Не залежить від фреймворків.
-- `src/Ports`: Інтерфейси для зовнішніх систем (наприклад, `ITaskRepository`).
-- `src/App`: Прикладний шар (`TaskService`, `TaskContext`) — оркестрація бізнес-логіки.
-- `src/Infra`: Реалізація портів (`PostgresTaskRepository`, `HttpTaskRepository`, `LocalStorageTaskRepository`).
-- `src/Core`: Допоміжні інструменти, як-от DI-контейнер.
+```text
+               +-------------------------------------------------------+
+               |                    React UI (App.tsx)                  |
+               +-------------------------------------------------------+
+                                           |
+                                (useTaskService Hook)
+                                           v
+               +-------------------------------------------------------+
+               |            Application Layer (TaskService)             |
+               +-------------------------------------------------------+
+                                           |
+                                  (ITaskRepository Port)
+                                           v
+     +-------------------------------------+-------------------------------------+
+     |                                     |                                     |
+     v                                     v                                     v
++-----------------------+     +-------------------------+     +-------------------------+
+| HttpTaskRepository    |     | PostgresTaskRepository  |     | LocalStorageRepository  |
+| (Frontend HTTP Fetch) |     | (Backend PostgreSQL)    |     | (Browser LocalStorage)  |
++-----------------------+     +-------------------------+     +-------------------------+
+```
+
+### Дотримання принципів SOLID
+
+1. **Single Responsibility Principle (SRP)**:
+   - `Task` містить лише доменні дані.
+   - `TaskService` виконує лише бізнес-правила та валідацію.
+   - `PostgresTaskRepository` відповідає виключно за SQL-запити.
+   - `App.tsx` відповідає тільки за відображення інтерфейсу.
+2. **Open/Closed Principle (OCP)**:
+   - Додавання нового джерела даних (наприклад, MongoDB) вимагає лише створення нового адаптера `ITaskRepository` без модифікації бізнес-логіки `TaskService`.
+3. **Liskov Substitution Principle (LSP)**:
+   - `PostgresTaskRepository`, `HttpTaskRepository` та `LocalStorageTaskRepository` є повністю взаємозамінними під контролем протитипу `ITaskRepository`.
+4. **Interface Segregation Principle (ISP)**:
+   - Інтерфейс `ITaskRepository` містить мінімально необхідний набір методів (`add`, `all`, `setStatus`, `remove`).
+5. **Dependency Inversion Principle (DIP)**:
+   - `TaskService` залежить від абстракції `ITaskRepository`, а не від конкретної реалізації бази даних.
 
 ---
 
-## 🚀 Швидкий старт
+## Швидкий старт
 
 ### 1. Попередні вимоги
-- Встановлений **Node.js** (v18+)
-- Запущений сервер **PostgreSQL**
+- **Node.js** (v18+)
+- **PostgreSQL** сервер
 
-### 2. Налаштування бази даних
-Створіть базу даних (наприклад, `taskdb`) у вашому PostgreSQL:
+### 2. Створення бази даних
 ```sql
 CREATE DATABASE taskdb;
 ```
 
-### 3. Конфігурація середовища
-Скопіюйте `.env.example` у `.env` у корені проекту та налаштуйте значення:
+### 3. Налаштування змінних оточення
+Скопіюйте `.env.example` у `.env` у корені проєкту:
+```bash
+cp .env.example .env
+```
+Вміст `.env`:
 ```env
 PORT=3001
-DATABASE_URL=postgresql://postgres:ВАШ_ПАРОЛЬ@localhost:5432/taskdb
+DATABASE_URL=postgresql://postgres:пароль@localhost:5432/taskdb
 VITE_API_URL=http://localhost:3001/api/tasks
 ```
 
@@ -69,70 +113,87 @@ VITE_API_URL=http://localhost:3001/api/tasks
 npm install
 ```
 
-### 5. Запуск для розробки (Development)
-Вам знадобиться два термінали:
+### 5. Запуск у режимі розробки (Development)
 
-**Термінал 1 (Бекенд):**
-```bash
-npm run dev:backend
-```
+Потрібно запустити два термінали:
 
-**Термінал 2 (Фронтенд):**
-```bash
-npm run dev:frontend
-```
+- **Terminal 1 (Бекенд Express):**
+  ```bash
+  npm run dev:backend
+  ```
+- **Terminal 2 (Фронтенд Vite):**
+  ```bash
+  npm run dev:frontend
+  ```
 
-Додаток буде доступний за адресою: [http://localhost:5173](http://localhost:5173)
+Фронтенд буде доступний за адресою: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 🧪 Тестування, Лінтинг та Форматування
+## Тестування, Лінтинг та Форматування
 
-- **Запуск юніт-тестів (Vitest):**
-  ```bash
-  npm run test
-  ```
-- **Запуск лінтера (ESLint):**
-  ```bash
-  npm run lint
-  ```
-- **Форматування коду (Prettier):**
-  ```bash
-  npm run format
-  ```
+| Команда | Опис |
+| :--- | :--- |
+| `npm run test` | Запуск юніт-тестів Vitest |
+| `npm run test:watch` | Інтерактивний режим автоперезапуску тестів |
+| `npm run lint` | Перевірка коду за допомогою ESLint |
+| `npm run format` | Автоматичне форматування коду Prettier |
+| `npm run format:check` | Перевірка дотримання правил Prettier |
 
 ---
 
-## 📦 Збірка та Production запуск
+## Production Збірка та Запуск
 
-Збірка фронтенду (Vite) та бекенду (`tsconfig.server.json` -> `dist/server.js`):
+Проєкт має розділені конфігурації збірки фронтенду (`vite build`) та бекенду (`tsconfig.server.json` -> `dist/server.js`):
+
 ```bash
+# Збірка обох частин проєкту
 npm run build
-```
-Запуск продакшн-сервера:
-```bash
+
+# Запуск продакшн Node.js сервера
 npm start
 ```
 
 ---
 
-## 📂 Структура папок
+## Структура проєкту
 
 ```text
-├── .github/workflows/ # GitHub Actions CI configuration
+├── .github/
+│   └── workflows/
+│       └── ci.yml               # Automated GitHub Actions Pipeline
 ├── src/
-│   ├── App/          # Application Layer (TaskService, TaskContext)
-│   ├── Core/         # Framework-agnostic core tools (DI Container)
-│   ├── Domain/       # Business Logic & Entities
-│   ├── Infra/        # Data Access (Postgres, Http, LocalStorage)
-│   ├── Ports/        # Interfaces (Abstractions)
-│   ├── App.tsx       # UI Components
-│   ├── server.ts     # Express Server entry point
-│   └── main.tsx      # React entry point
-├── tests/            # Vitest Unit Tests
-├── public/           # Static assets
-└── views/            # HTML templates
+│   ├── App/
+│   │   ├── TaskContext.tsx      # React Context Provider & useTaskService Hook
+│   │   └── TaskService.ts       # Application Business Logic Layer
+│   ├── Core/
+│   │   └── Container.ts         # Lightweight Dependency Injection Container
+│   ├── Domain/
+│   │   ├── Task.ts              # Task Domain Entity
+│   │   └── TaskStatus.ts        # Task Status Enum & Helpers
+│   ├── Infra/
+│   │   ├── HttpTaskRepository.ts       # Frontend HTTP Fetch Repository Adapter
+│   │   ├── LocalStorageTaskRepository.ts # Frontend LocalStorage Repository Adapter
+│   │   └── PostgresTaskRepository.ts   # Backend PostgreSQL Repository Adapter
+│   ├── Ports/
+│   │   └── ITaskRepository.ts   # Repository Abstraction (Port)
+│   ├── App.tsx                  # Main React Component (UI Layer)
+│   ├── server.ts                # Backend Express Server Entry Point
+│   ├── main.tsx                 # Frontend React Entry Point (DI Init)
+│   └── vite-env.d.ts            # Vite TypeScript Declarations
+├── tests/
+│   ├── App/
+│   │   └── TaskService.test.ts  # Unit tests for TaskService logic
+│   └── Domain/
+│       └── TaskStatus.test.ts   # Unit tests for TaskStatus domain rules
+├── .env.example                 # Environment variables template
+├── eslint.config.js             # ESLint Flat Configuration
+├── Makefile                     # Automation tasks
+├── tsconfig.json                # Frontend TypeScript Configuration
+├── tsconfig.server.json         # Backend Node.js TypeScript Configuration
+└── vitest.config.ts             # Vitest Configuration
 ```
 
 ---
-⭐ *Цей проект створений для демонстрації навичок архітектурного проектування та розробки fullstack додатків.*
+
+*Цей проєкт створений для демонстрації практичного застосування Clean Architecture, SOLID та сучасних Fullstack підходів на TypeScript.*
