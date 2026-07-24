@@ -89,7 +89,7 @@ const App: React.FC = () => {
             min="1"
             max="5"
             value={priority}
-            onChange={(e) => setPriority(parseInt(e.target.value))}
+            onChange={(e) => setPriority(Number.parseInt(e.target.value))}
           />
           <textarea
             className="span2"

@@ -22,7 +22,23 @@ await repo.init(); // Створення таблиць
 
 container.set('TaskService', () => new TaskService(repo));
 
-app.use(cors());
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  })
+);
 app.use(express.json());
 
 // API Routes
@@ -50,7 +66,7 @@ app.post('/api/tasks', async (req, res) => {
 app.patch('/api/tasks/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
-    const id = parseInt(req.params.id);
+    const id = Number.parseInt(req.params.id, 10);
     const service = container.get<TaskService>('TaskService');
     await service.changeStatus(id, taskStatusFromString(status));
     res.sendStatus(204);
@@ -61,7 +77,7 @@ app.patch('/api/tasks/:id/status', async (req, res) => {
 
 app.delete('/api/tasks/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = Number.parseInt(req.params.id, 10);
     const service = container.get<TaskService>('TaskService');
     await service.remove(id);
     res.sendStatus(204);

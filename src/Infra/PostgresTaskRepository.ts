@@ -4,7 +4,7 @@ import { Task } from '../Domain/Task.js';
 import { TaskStatus, taskStatusFromString } from '../Domain/TaskStatus.js';
 
 export class PostgresTaskRepository implements ITaskRepository {
-  private pool: pg.Pool;
+  private readonly pool: pg.Pool;
 
   constructor(connectionString: string) {
     this.pool = new pg.Pool({
