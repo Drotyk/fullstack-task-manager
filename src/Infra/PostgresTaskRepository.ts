@@ -1,7 +1,7 @@
 import pg from 'pg';
-import { ITaskRepository } from "../Ports/ITaskRepository";
-import { Task } from "../Domain/Task";
-import { TaskStatus, taskStatusFromString } from "../Domain/TaskStatus";
+import { ITaskRepository } from "../Ports/ITaskRepository.js";
+import { Task } from "../Domain/Task.js";
+import { TaskStatus, taskStatusFromString } from "../Domain/TaskStatus.js";
 
 export class PostgresTaskRepository implements ITaskRepository {
     private pool: pg.Pool;

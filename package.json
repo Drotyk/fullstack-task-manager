@@ -5,7 +5,9 @@
   "scripts": {
     "dev:frontend": "vite",
     "dev:backend": "nodemon src/server.ts",
-    "build": "tsc && vite build",
+    "build:frontend": "tsc -p tsconfig.json && vite build",
+    "build:backend": "tsc -p tsconfig.server.json",
+    "build": "npm run build:frontend && npm run build:backend",
     "start": "node dist/server.js"
   },
   "dependencies": {

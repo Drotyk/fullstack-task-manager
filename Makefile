@@ -1,16 +1,20 @@
-.PHONY: install build dev deploy clean
+.PHONY: install build build-frontend build-backend start clean
 
 install:
 	npm install
 
-dev:
-	npm run dev
-
 build:
 	npm run build
 
-deploy:
-	npm run deploy
+build-frontend:
+	npm run build:frontend
+
+build-backend:
+	npm run build:backend
+
+start:
+	npm run start
 
 clean:
 	rm -rf dist node_modules
+

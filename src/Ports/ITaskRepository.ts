@@ -1,5 +1,5 @@
-import { Task } from "../Domain/Task";
-import { TaskStatus } from "../Domain/TaskStatus";
+import { Task } from "../Domain/Task.js";
+import { TaskStatus } from "../Domain/TaskStatus.js";
 
 export interface ITaskRepository {
     add(title: string, description: string, priority: number, dueDate: string): Promise<number>;

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Task } from './Domain/Task';
-
-const API_URL = 'http://localhost:3001/api/tasks';
+import { Task } from './Domain/Task.js';
+import { taskStatusFromString } from './Domain/TaskStatus.js';
+import { useTaskService } from './App/TaskContext.js';
 
 const App: React.FC = () => {
+  const taskService = useTaskService();
+
   const [tasks, setTasks] = useState<Task[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,9 +16,8 @@ const App: React.FC = () => {
 
   const refreshTasks = async () => {
     try {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error('Помилка завантаження');
-      setTasks(await res.json());
+      const data = await taskService.all();
+      setTasks(data);
     } catch (e: any) {
       setError(e.message);
     }
@@ -29,31 +30,20 @@ const App: React.FC = () => {
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, priority, dueDate })
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Помилка додавання');
-      }
+      await taskService.create(title, description, priority, dueDate);
       setTitle(''); setDescription(''); setPriority(3); setDueDate('');
       setError(null);
-      refreshTasks();
+      await refreshTasks();
     } catch (e: any) {
       setError(e.message);
     }
   };
 
-  const handleChangeStatus = async (id: number, status: string) => {
+  const handleChangeStatus = async (id: number, statusStr: string) => {
     try {
-      await fetch(`${API_URL}/${id}/status`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
-      });
-      refreshTasks();
+      const status = taskStatusFromString(statusStr);
+      await taskService.changeStatus(id, status);
+      await refreshTasks();
     } catch (e: any) {
       setError(e.message);
     }
@@ -62,8 +52,8 @@ const App: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (!window.confirm('Видалити задачу?')) return;
     try {
-      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-      refreshTasks();
+      await taskService.remove(id);
+      await refreshTasks();
     } catch (e: any) {
       setError(e.message);
     }
@@ -72,8 +62,8 @@ const App: React.FC = () => {
   return (
     <main className="container">
       <header className="header">
-        <h1>Task Manager (React + Postgres)</h1>
-        <p className="muted">Fullstack demo: React → Express → Postgres</p>
+        <h1>Task Manager (Clean Architecture)</h1>
+        <p className="muted">Fullstack demo: React Context → TaskService → HttpTaskRepository → Express</p>
       </header>
 
       {error && <div className="alert">{error}</div>}

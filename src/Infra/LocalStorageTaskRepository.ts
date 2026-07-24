@@ -1,11 +1,11 @@
-import { ITaskRepository } from "../Ports/ITaskRepository";
-import { Task } from "../Domain/Task";
-import { TaskStatus } from "../Domain/TaskStatus";
+import { ITaskRepository } from "../Ports/ITaskRepository.js";
+import { Task } from "../Domain/Task.js";
+import { TaskStatus } from "../Domain/TaskStatus.js";
 
 export class LocalStorageTaskRepository implements ITaskRepository {
     private readonly STORAGE_KEY = 'tasks_data';
 
-    public add(title: string, description: string, priority: number, dueDate: string): number {
+    public async add(title: string, description: string, priority: number, dueDate: string): Promise<number> {
         const tasks = this.getAllFromStorage();
         const id = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
         
@@ -23,11 +23,11 @@ export class LocalStorageTaskRepository implements ITaskRepository {
         return id;
     }
 
-    public all(): Task[] {
+    public async all(): Promise<Task[]> {
         return this.getAllFromStorage().sort((a, b) => b.id - a.id);
     }
 
-    public setStatus(id: number, status: TaskStatus): void {
+    public async setStatus(id: number, status: TaskStatus): Promise<void> {
         const tasks = this.getAllFromStorage();
         const index = tasks.findIndex(t => t.id === id);
         if (index === -1) throw new Error("Task not found");
@@ -36,7 +36,7 @@ export class LocalStorageTaskRepository implements ITaskRepository {
         this.save(tasks);
     }
 
-    public remove(id: number): void {
+    public async remove(id: number): Promise<void> {
         const tasks = this.getAllFromStorage();
         const filtered = tasks.filter(t => t.id !== id);
         if (filtered.length === tasks.length) throw new Error("Task not found");

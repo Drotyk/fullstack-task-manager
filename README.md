@@ -48,10 +48,11 @@ CREATE DATABASE taskdb;
 ```
 
 ### 3. Конфігурація середовища
-Створіть файл `.env` у корені проекту:
+Скопіюйте `.env.example` у `.env` у корені проекту та налаштуйте значення:
 ```env
-DATABASE_URL=postgresql://postgres:ВАШ_ПАРОЛЬ@localhost:5432/taskdb
 PORT=3001
+DATABASE_URL=postgresql://postgres:ВАШ_ПАРОЛЬ@localhost:5432/taskdb
+VITE_API_URL=http://localhost:3001/api/tasks
 ```
 
 ### 4. Встановлення залежностей
@@ -59,7 +60,7 @@ PORT=3001
 npm install
 ```
 
-### 5. Запуск проекту
+### 5. Запуск для розробки (Development)
 Вам знадобиться два термінали:
 
 **Термінал 1 (Бекенд):**
@@ -74,7 +75,15 @@ npm run dev:frontend
 
 Додаток буде доступний за адресою: [http://localhost:5173](http://localhost:5173)
 
----
+### 6. Збірка та Production запуск
+Збірка фронтенду (Vite) та бекенду (`tsconfig.server.json` -> `dist/server.js`):
+```bash
+npm run build
+```
+Запуск продакшн-сервера:
+```bash
+npm start
+```
 
 ## 📂 Структура папок
 

@@ -1,6 +1,6 @@
-import { ITaskRepository } from "../Ports/ITaskRepository";
-import { Task } from "../Domain/Task";
-import { TaskStatus } from "../Domain/TaskStatus";
+import { ITaskRepository } from "../Ports/ITaskRepository.js";
+import { Task } from "../Domain/Task.js";
+import { TaskStatus } from "../Domain/TaskStatus.js";
 
 export class TaskService {
     constructor(private readonly repo: ITaskRepository) {}
