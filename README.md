@@ -72,7 +72,7 @@
 
 1. **Single Responsibility Principle (SRP)**:
    - `Task` містить лише доменні дані.
-   - `TaskService` виконує лише бізнес-правила та валідацію.
+   - `TaskService` виконує лише бізнес-правила та суворо валідує числові параметри (`Number.isInteger`).
    - `PostgresTaskRepository` відповідає виключно за SQL-запити.
    - `App.tsx` відповідає тільки за відображення інтерфейсу.
 2. **Open/Closed Principle (OCP)**:

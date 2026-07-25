@@ -55,8 +55,9 @@ app.get('/api/tasks', async (_req, res) => {
 app.post('/api/tasks', async (req, res) => {
   try {
     const { title, description, priority, dueDate } = req.body;
+    const parsedPriority = Number.parseInt(priority, 10);
     const service = container.get<TaskService>('TaskService');
-    const id = await service.create(title, description, priority, dueDate);
+    const id = await service.create(title, description, parsedPriority, dueDate);
     res.status(201).json({ id });
   } catch (err: unknown) {
     res.status(400).json({ error: getErrorMessage(err) });
