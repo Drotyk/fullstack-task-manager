@@ -7,7 +7,12 @@ import { TaskStatus } from '../../src/Domain/TaskStatus.js';
 class MockTaskRepository implements ITaskRepository {
   private tasks: Task[] = [];
 
-  public async add(title: string, description: string, priority: number, dueDate: string): Promise<number> {
+  public async add(
+    title: string,
+    description: string,
+    priority: number,
+    dueDate: string
+  ): Promise<number> {
     const id = this.tasks.length + 1;
     this.tasks.push(new Task(id, title, description, TaskStatus.TODO, priority, dueDate));
     return id;
@@ -25,7 +30,7 @@ class MockTaskRepository implements ITaskRepository {
   }
 
   public async remove(id: number): Promise<void> {
-    this.tasks = this.tasks.filter(t => t.id !== id);
+    this.tasks = this.tasks.filter((t) => t.id !== id);
   }
 }
 
@@ -53,7 +58,9 @@ describe('TaskService', () => {
   it('should throw an error when priority is out of range 1..5 or NaN', async () => {
     await expect(service.create('Task', 'Desc', 0, '')).rejects.toThrow('Priority must be 1..5');
     await expect(service.create('Task', 'Desc', 6, '')).rejects.toThrow('Priority must be 1..5');
-    await expect(service.create('Task', 'Desc', Number.NaN, '')).rejects.toThrow('Priority must be 1..5');
+    await expect(service.create('Task', 'Desc', Number.NaN, '')).rejects.toThrow(
+      'Priority must be 1..5'
+    );
     await expect(service.create('Task', 'Desc', 2.5, '')).rejects.toThrow('Priority must be 1..5');
   });
 

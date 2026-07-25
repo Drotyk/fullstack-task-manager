@@ -1,14 +1,14 @@
 # Task Manager Fullstack
 
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
-![React](https://img.shields.io/badge/React_18-20232A?style=flat&logo=react&logoColor=61DAFB)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
-![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
-![Vitest](https://img.shields.io/badge/Vitest-Unit_Tests-yellow?logo=vitest)
-![ESLint](https://img.shields.io/badge/ESLint-Linter-4B32C3?logo=eslint)
-![Prettier](https://img.shields.io/badge/Prettier-Formatter-F7B93E?logo=prettier)
-![CI Pipeline](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React_18-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=flat-square&logo=vitest&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=black)
+![CI Pipeline](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 
 Сучасний Fullstack веб-додаток для керування завданнями, розроблений із суворим дотриманням принципів **Clean Architecture** (Ports & Adapters) та **SOLID**. 
 
@@ -22,8 +22,9 @@
 - **Clean / Hexagonal Architecture**: Повний поділ на шари (Domain, Ports, Application, Infrastructure, UI).
 - **Dependency Injection (DI)**: Власний легкий DI-контейнер (`Container.ts`) для керування залежностями на бекенді та фронтенді.
 - **Взаємозамінність репозиторіїв**: Можливість гарячої заміни джерела даних (`PostgresTaskRepository`, `HttpTaskRepository`, `LocalStorageTaskRepository`) без зміни бізнес-логіки.
-- **Full Type Safety**: 100% покриття TypeScript на всіх рівнях системи без використання `any`.
-- **Автоматичне тестування та CI**: Покриття юніт-тестами >93% (statements) для доменної логіки та сервісів за допомогою **Vitest**, суворий лінтинг (**ESLint**), форматування (**Prettier**) та автоматична перевірка у **GitHub Actions**.
+- **Full Type Safety & Strict Validation**: 100% покриття TypeScript на всіх рівнях системи без використання `any`. Валідація числових параметрів (`id`, `priority`) за допомогою `Number.isInteger` з відхиленням `NaN` та чисел із плаваючою крапкою.
+- **Безпека**: Конфігурований CORS із білим списком доменів (`CORS_ORIGIN`) та безпечне встановлення залежностей у CI (`npm ci --ignore-scripts`).
+- **Автоматичне тестування та CI**: Покриття юніт-тестами >93% (statements) для доменної логіки та сервісів за допомогою **Vitest** (із перевіркою покриття `test:coverage`), суворий Flat Config лінтинг (**ESLint v10**) для всього проєкту (`src` та `tests`), форматування (**Prettier**) та автоматичні перевірки у **GitHub Actions**.
 
 ---
 
@@ -34,9 +35,9 @@
 | **Frontend** | React 18, Vite, TypeScript, Vanilla CSS, React Context |
 | **Backend** | Node.js (ESM), Express, `pg` (node-postgres), dotenv, cors |
 | **Database** | PostgreSQL |
-| **Тестування** | Vitest |
-| **Лінтер / Форматер** | ESLint v10 (Flat Config), Prettier |
-| **CI / CD** | GitHub Actions Workflow (`ci.yml`) |
+| **Тестування** | Vitest (звіти покриття v8) |
+| **Лінтер / Форматер** | ESLint v10 (Flat Config `eslint.config.js`), Prettier |
+| **CI / CD** | GitHub Actions Workflow (`ci.yml`) з `--ignore-scripts` та `test:coverage` |
 | **Архітектура** | Clean Architecture, Ports & Adapters, SOLID, Repository Pattern, DI |
 
 ---
@@ -105,6 +106,7 @@ cp .env.example .env
 ```env
 PORT=3001
 DATABASE_URL=postgresql://postgres:пароль@localhost:5432/taskdb
+CORS_ORIGIN=http://localhost:5173,http://localhost:3000
 VITE_API_URL=http://localhost:3001/api/tasks
 ```
 
@@ -137,7 +139,7 @@ npm install
 | `npm run test` | Запуск юніт-тестів Vitest |
 | `npm run test:coverage` | Генерація звіту про покриття тестами (coverage) |
 | `npm run test:watch` | Інтерактивний режим автоперезапуску тестів |
-| `npm run lint` | Перевірка коду за допомогою ESLint |
+| `npm run lint` | Перевірка коду за допомогою ESLint (для всього проєкту, включаючи `src` та `tests`) |
 | `npm run format` | Автоматичне форматування коду Prettier |
 | `npm run format:check` | Перевірка дотримання правил Prettier |
 

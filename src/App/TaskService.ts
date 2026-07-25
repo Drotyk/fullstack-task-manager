@@ -12,7 +12,8 @@ export class TaskService {
     dueDate: string
   ): Promise<number> {
     if (!title.trim()) throw new Error('Title is empty');
-    if (!Number.isInteger(priority) || priority < 1 || priority > 5) throw new Error('Priority must be 1..5');
+    if (!Number.isInteger(priority) || priority < 1 || priority > 5)
+      throw new Error('Priority must be 1..5');
     return await this.repo.add(title, description, priority, dueDate);
   }
 
