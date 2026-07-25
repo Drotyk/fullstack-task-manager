@@ -12,7 +12,7 @@ export class TaskService {
     dueDate: string
   ): Promise<number> {
     if (!title.trim()) throw new Error('Title is empty');
-    if (priority < 1 || priority > 5) throw new Error('Priority must be 1..5');
+    if (!Number.isInteger(priority) || priority < 1 || priority > 5) throw new Error('Priority must be 1..5');
     return await this.repo.add(title, description, priority, dueDate);
   }
 
@@ -21,12 +21,12 @@ export class TaskService {
   }
 
   public async changeStatus(id: number, status: TaskStatus): Promise<void> {
-    if (id <= 0) throw new Error('Bad id');
+    if (!Number.isInteger(id) || id <= 0) throw new Error('Bad id');
     await this.repo.setStatus(id, status);
   }
 
   public async remove(id: number): Promise<void> {
-    if (id <= 0) throw new Error('Bad id');
+    if (!Number.isInteger(id) || id <= 0) throw new Error('Bad id');
     await this.repo.remove(id);
   }
 }
