@@ -10,7 +10,7 @@
 ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=black)
 ![CI Pipeline](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 
-Сучасний Fullstack веб-додаток для керування завданнями, розроблений із суворим дотриманням принципів **Clean Architecture** (Ports & Adapters) та **SOLID**. 
+Fullstack веб-додаток для керування завданнями
 
 Проєкт демонструє побудову розширюваної системи з підтримкою різних джерел даних (PostgreSQL, LocalStorage, HTTP REST API), власного DI-контейнера, високого покриття юніт-тестами бізнес-логіки та автоматизованого CI/CD пайплайну.
 
